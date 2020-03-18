@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Mine-Sweeper</title>
+</head>
+
+<body onload="init()">
+    <h1>Mine-Sweeper</h1>
+
+    <div class="features">
+        <div class="hints-header">
+            <div>Hints</div>
+            <div class="hints"></div>
+        </div>
+        
+        <div class="time">
+            <div>Game Time</div>
+            <div class="stop-watch"></div>
+        </div>
+    </div>
+
+    <div class="matrix"></div>
+
+    <div class="smiley" onclick="restartGame()"></div>
+    
+    <script src="js/util.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
