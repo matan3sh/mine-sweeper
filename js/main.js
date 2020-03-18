@@ -11,6 +11,7 @@ var gGame = {
     markedCount: 0,
     secsPassed: 0
 }
+var gGameOver = false
 var gStopWatch
 var minutes = 0
 var gHints = 3
@@ -76,6 +77,7 @@ function cellClicked(elCell) {
     var cellOnBoard = toNumber(getCellCoord(elCell))
     var cell = gBoard[cellOnBoard[0]][cellOnBoard[1]]
 
+    if (gGameOver) return
     if (gGame.isOn) {
         gGame.isOn = false
         firstClick(cellOnBoard[0], cellOnBoard[1])
@@ -85,6 +87,7 @@ function cellClicked(elCell) {
         // Update Model
         cell.isShown = true
         gGame.isOn = false
+        gGameOver = true
 
         // Update DOM
         elCell.innerHTML = MINE
@@ -198,6 +201,7 @@ function restartGame() {
     gGame.shownCount = 0;
     gGame.isOn = true;
     gGame.secsPassed = 0
+    gGameOver = false
     minutes = 0
     gHints = 3
     clearInterval(gStopWatch)
