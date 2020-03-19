@@ -47,6 +47,10 @@ body {
     background-color: #9E4770;
 }
 
+.cell:hover{
+    background-color: rgb(140, 103, 155);
+}
+
 .marked {
     background-color: #631D76;
 }
