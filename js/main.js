@@ -77,11 +77,11 @@ function firstClick(row, col) {
 function cellClicked(elCell) {
     var cellOnBoard = toNumber(getCellCoord(elCell))
     var cell = gBoard[cellOnBoard[0]][cellOnBoard[1]]
-    
+
     if (gGameOver) return
     if (gGame.isOn) {
         gGame.isOn = false
-        
+
         // set mines after first click
         setMinesInRandomCell()
         firstClick(cellOnBoard[0], cellOnBoard[1])
@@ -90,11 +90,11 @@ function cellClicked(elCell) {
     if (cell.isMine) {
         // Update Model
         cell.isShown = true
-        
+
         // Update DOM
         elCell.innerHTML = MINE
         elCell.classList.add('marked')
-        
+
         // check if there is lives to user
         if (checkLives(elCell)) return
         else {
@@ -107,11 +107,11 @@ function cellClicked(elCell) {
         // Update Modal
         cell.isShown = true
         gGame.shownCount++
-        
+
         // Update DOM
         elCell.innerHTML = cell.minesAroundCount
         elCell.classList.add('marked')
-        
+
         if (isFinished()) {
             // Update DOM
             console.log('WIN', getGameTime())
@@ -123,7 +123,7 @@ function cellClicked(elCell) {
         }
         if (cell.minesAroundCount === 0) expandShown(elCell)
     }
-    
+
 }
 
 
@@ -153,7 +153,7 @@ function setMinesNegsCount(mineRow, mineCol) {
 // display neighbors while there is no mine around
 function expandShown(elCurrCell) {
     var cellOnBoard = toNumber(getCellCoord(elCurrCell))
-    
+
     for (var i = cellOnBoard[0] - 1; i <= cellOnBoard[0] + 1; i++) {
         if (i < 0 || i >= gLevel.SIZE) continue
         for (var j = cellOnBoard[1] - 1; j <= cellOnBoard[1] + 1; j++) {
@@ -161,17 +161,17 @@ function expandShown(elCurrCell) {
             if (i === cellOnBoard[0] && j === cellOnBoard[1]) continue
             if (gBoard[i][j].isShown) continue;
             var id = 'td ' + (i) + '-' + (j);
-            
+
             // Update Model
             gBoard[i][j].isShown = true;
-            
+
             // Update DOM
             var elNegCell = document.getElementById(id);
             elNegCell.innerHTML = gBoard[i][j].minesAroundCount
             elNegCell.classList.add('marked')
-            
+
             gGame.shownCount++
-            
+
             if (!gBoard[i][j].minesAroundCount) {
                 expandShown(elNegCell)
             }
@@ -182,28 +182,28 @@ function expandShown(elCurrCell) {
 function flagClick(elCell) {
     var cellOnBoard = toNumber(getCellCoord(elCell))
     var cell = gBoard[cellOnBoard[0]][cellOnBoard[1]]
-    
+
     if (cell.isShown) return
     else {
         if (!cell.isMarked) {
             // Update Modal
             cell.isMarked = true
-            
+
             // Update DOM
             elCell.innerHTML = FLAG
         } else {
             // Update Modal
             cell.isMarked = false
-            
+
             // Update DOM
             elCell.innerHTML = EMPTY
         }
     }
 }
 
-function checkLives(currCell){
+function checkLives(currCell) {
     var elLives = document.querySelector('.lives');
-    if(gLives === 3) {
+    if (gLives === 3) {
         elLives.innerHTML = LIVES + LIVES
         setTimeout(function () {
             currCell.classList.remove('marked')
@@ -292,9 +292,9 @@ function stopWatch() {
     document.querySelector('.stop-watch').innerHTML = gMinutes + ':' + gGame.secsPassed;
 }
 
-function showFeatures(){
+function showFeatures() {
     var storedGameTime = localStorage.getItem('gameTime');
-    if (storedGameTime!== null) document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + storedGameTime);
+    if (storedGameTime !== null) document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + storedGameTime);
 
     document.querySelector('.lives').innerHTML = LIVES + LIVES + LIVES
     document.querySelector('.stop-watch').innerHTML = gMinutes + ': 0' + gGame.secsPassed;
@@ -310,27 +310,32 @@ function getGameTime() {
 }
 
 function calcBestTime() {
+    debugger
     var storedGameTime = localStorage.getItem('gameTime')
-    
+
     if (storedGameTime === null) {
         var temp = handleGameTimeInLocalStorage('')
         saveGameTime()
         document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + gMinutes + ':' + gGame.secsPassed);
+        debugger
     } else {
         var temp = handleGameTimeInLocalStorage(storedGameTime)
-        if (temp[0] > gMinutes) {
+        if (parseInt(temp[0]) < parseInt(gMinutes)) {
             gMinutes = temp[0]
             gGame.secsPassed = temp[1]
             saveGameTime()
             document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + gMinutes + ':' + gGame.secsPassed);
         }
-        else if (temp[1] > gGame.secsPassed) {
+        else if (parseInt(temp[1]) < parseInt(gGame.secsPassed)) {
             gGame.secsPassed = temp[1]
             saveGameTime()
             document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + gMinutes + ':' + gGame.secsPassed);
+            debugger
         }
         else {
-            document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + storedGameTime);
+            saveGameTime()
+            document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + gMinutes + ':' + gGame.secsPassed);
+            debugger
         }
     }
 
