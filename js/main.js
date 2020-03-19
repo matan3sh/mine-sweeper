@@ -29,7 +29,6 @@ function init() {
     showFeatures()
     buildBoard()
     renderHints(gHints)
-    setMinesInRandomCell()
     renderBoard()
 }
 
@@ -79,6 +78,9 @@ function cellClicked(elCell) {
     if (gGameOver) return
     if (gGame.isOn) {
         gGame.isOn = false
+        
+        // set mines after first click
+        setMinesInRandomCell()
         firstClick(cellOnBoard[0], cellOnBoard[1])
     }
     if (cell.isMarked) return
