@@ -15,7 +15,7 @@ body {
     margin: 0;
 }
 
-.features{
+.features, .features-down{
     display: inline-flex;
 }
 
@@ -36,8 +36,8 @@ body {
     margin-left: 100px;
 }
 
-.stop-watch{
-    margin-left: 20px;
+.stop-watch, .lives{
+    margin-left: 25px;
 }
 
 .cell {

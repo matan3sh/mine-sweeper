@@ -3,7 +3,7 @@
 var gBoard = [];
 var gLevel = {
     SIZE: 4,
-    MINES: 2
+    MINES: 4
 }
 var gGame = {
     isOn: true,
@@ -15,6 +15,7 @@ var gGameOver = false
 var gStopWatch
 var gMinutes = 0
 var gHints = 3
+var gLives = 3
 
 const EMPTY = '';
 const MINE = '&#128163'
@@ -23,6 +24,7 @@ const HINT = '&#128161;'
 const SMILEY_NORMAL = '&#128515;'
 const SMILEY_LOSE = '&#128532;'
 const SMILEY_WIN = '&#128526;'
+const LIVES = '&#128156;'
 
 function init() {
     clearInterval(gStopWatch)
@@ -71,6 +73,35 @@ function firstClick(row, col) {
     gStopWatch = setInterval(stopWatch, 1000)
 }
 
+function checkLives(currCell){
+    var elLives = document.querySelector('.lives');
+    if(gLives === 3) {
+        elLives.innerHTML = LIVES + LIVES
+        setTimeout(function () {
+            currCell.classList.remove('marked')
+        }, 1000)
+        gLives--
+        return true
+    }
+    else if (gLives === 2) {
+        elLives.innerHTML = LIVES
+        setTimeout(function () {
+            currCell.classList.remove('marked')
+        }, 1000)
+        gLives--
+        return true
+    }
+    else if (gLives === 1) {
+        elLives.innerHTML = ''
+        setTimeout(function () {
+            currCell.classList.remove('marked')
+        }, 1000)
+        gLives--
+        return true
+    }
+    return false
+}
+
 function cellClicked(elCell) {
     var cellOnBoard = toNumber(getCellCoord(elCell))
     var cell = gBoard[cellOnBoard[0]][cellOnBoard[1]]
@@ -87,16 +118,19 @@ function cellClicked(elCell) {
     if (cell.isMine) {
         // Update Model
         cell.isShown = true
-        gGame.isOn = false
-        gGameOver = true
-
+        
         // Update DOM
         elCell.innerHTML = MINE
         elCell.classList.add('marked')
-
-        console.log('GAME OVER', getGameTime())
-        document.querySelector('.smiley').innerHTML = SMILEY_LOSE
-        clearInterval(gStopWatch)
+        
+        // check if there is lives to user
+        if (checkLives(elCell)) return
+        else {
+            gGame.isOn = false
+            gGameOver = true
+            document.querySelector('.smiley').innerHTML = SMILEY_LOSE
+            clearInterval(gStopWatch)
+        }
     } else {
         // Update Modal
         cell.isShown = true
@@ -111,6 +145,7 @@ function cellClicked(elCell) {
             console.log('WIN', getGameTime())
             calcBestTime()
             document.querySelector('.smiley').innerHTML = SMILEY_WIN
+            gGameOver = true
             gGame.isOn = false
             clearInterval(gStopWatch)
         }
@@ -206,6 +241,7 @@ function restartGame() {
     gGameOver = false
     gMinutes = 0
     gHints = 3
+    gLives = 3
     clearInterval(gStopWatch)
     init()
 }
@@ -259,6 +295,7 @@ function showFeatures(){
     var storedGameTime = localStorage.getItem('gameTime');
     if (storedGameTime!== null) document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + storedGameTime);
 
+    document.querySelector('.lives').innerHTML = LIVES + LIVES + LIVES
     document.querySelector('.stop-watch').innerHTML = gMinutes + ': 0' + gGame.secsPassed;
     document.querySelector('.smiley').innerHTML = SMILEY_NORMAL
 }
