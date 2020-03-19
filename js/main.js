@@ -344,14 +344,12 @@ function getGameTime() {
 }
 
 function calcBestTime() {
-    debugger
     var storedGameTime = localStorage.getItem('gameTime')
 
     if (storedGameTime === null) {
         var temp = handleGameTimeInLocalStorage('')
         saveGameTime()
         document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + gMinutes + ':' + gGame.secsPassed);
-        debugger
     } else {
         var temp = handleGameTimeInLocalStorage(storedGameTime)
         if (parseInt(temp[0]) < parseInt(gMinutes)) {
@@ -364,12 +362,10 @@ function calcBestTime() {
             gGame.secsPassed = temp[1]
             saveGameTime()
             document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + gMinutes + ':' + gGame.secsPassed);
-            debugger
         }
         else {
             saveGameTime()
             document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + gMinutes + ':' + gGame.secsPassed);
-            debugger
         }
     }
 
