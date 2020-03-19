@@ -24,7 +24,10 @@ function getCellWithoutMines() {
 // disable right mouse click for expand dropdown menu on click
 document.oncontextmenu = document.body.oncontextmenu = function () { return false; }
 
-function handleGameTimeInLocalStorage(str){
-    var temp = str.split(':');
-    return temp
+function handleGameTimeInLocalStorage(str) {
+    if (str === null) return
+    else {
+        var temp = str.split(':');
+        return temp
+    }
 }
