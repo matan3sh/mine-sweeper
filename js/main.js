@@ -26,6 +26,7 @@ const SMILEY_WIN = '&#128526;'
 
 function init() {
     clearInterval(gStopWatch)
+    showBestTime()
     document.querySelector('.stop-watch').innerHTML = minutes + ': 0' + gGame.secsPassed;
     document.querySelector('.smiley').innerHTML = SMILEY_NORMAL
     buildBoard()
@@ -93,7 +94,7 @@ function cellClicked(elCell) {
         elCell.innerHTML = MINE
         elCell.classList.add('marked')
 
-        console.log('GAME OVER')
+        console.log('GAME OVER', getGameTime())
         document.querySelector('.smiley').innerHTML = SMILEY_LOSE
         clearInterval(gStopWatch)
     } else {
@@ -107,7 +108,8 @@ function cellClicked(elCell) {
 
         if (isFinished()) {
             // Update DOM
-            console.log('WIN')
+            console.log('WIN', getGameTime())
+            calcBestTime()
             document.querySelector('.smiley').innerHTML = SMILEY_WIN
             gGame.isOn = false
             clearInterval(gStopWatch)
@@ -251,4 +253,40 @@ function stopWatch() {
     }
     if (gGame.secsPassed < 10) gGame.secsPassed = '0' + gGame.secsPassed
     document.querySelector('.stop-watch').innerHTML = minutes + ':' + gGame.secsPassed;
+}
+
+function showBestTime(){
+    var storedGameTime = localStorage.getItem('gameTime');
+    if (storedGameTime!== null) document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + storedGameTime);
+}
+
+function saveGameTime() {
+    localStorage.setItem('gameTime', minutes + ':' + gGame.secsPassed);
+}
+
+function getGameTime() {
+    return minutes + ' min and ' + gGame.secsPassed + ' sec'
+}
+
+function calcBestTime() {
+    var storedGameTime = localStorage.getItem('gameTime')
+    var temp = handleGameTimeInLocalStorage(storedGameTime)
+
+    if (storedGameTime === null) {
+        saveGameTime()
+        document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + minutes + ':' + gGame.secsPassed);
+    } else {
+        if (temp[0] > minutes) {
+            saveGameTime()
+            document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + minutes + ':' + gGame.secsPassed);
+        }
+        else if (temp[1] > gGame.secsPassed) {
+            saveGameTime()
+            document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + minutes + ':' + gGame.secsPassed);
+        }
+        else {
+            document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + storedGameTime);
+        }
+    }
+
 }
