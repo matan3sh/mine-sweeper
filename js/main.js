@@ -133,7 +133,7 @@ function cellClicked(elCell) {
         elCell.innerHTML = cell.minesAroundCount
         elCell.classList.add('marked')
 
-        if (isFinished()) {
+        if (isFinished() && isNoMinesLeft()) {
             // Update DOM
             console.log('WIN', getGameTime())
             calcBestTime()
@@ -253,6 +253,16 @@ function checkLives(currCell) {
 
 function isFinished() {
     return gGame.shownCount === getCellWithoutMines()
+}
+
+// return true if there is no mines left on board
+function isNoMinesLeft() {
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard[0].length; j++) {
+            if (gBoard[i][j] === MINE) return false
+        }
+    }
+    return true
 }
 
 function restartGame() {
