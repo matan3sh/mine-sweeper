@@ -319,10 +319,13 @@ function calcBestTime() {
     } else {
         var temp = handleGameTimeInLocalStorage(storedGameTime)
         if (temp[0] > gMinutes) {
+            gMinutes = temp[0]
+            gGame.secsPassed = temp[1]
             saveGameTime()
             document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + gMinutes + ':' + gGame.secsPassed);
         }
         else if (temp[1] > gGame.secsPassed) {
+            gGame.secsPassed = temp[1]
             saveGameTime()
             document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + gMinutes + ':' + gGame.secsPassed);
         }
