@@ -3,7 +3,7 @@
 var gBoard = [];
 var gLevel = {
     SIZE: 4,
-    MINES: 4
+    MINES: 2
 }
 var gGame = {
     isOn: true,
@@ -32,6 +32,27 @@ function init() {
     buildBoard()
     renderHints(gHints)
     renderBoard()
+}
+
+function renderLevel(size, minesNumber) {
+    if (size === 4) {
+        document.getElementById("4X4").checked = true
+        gLevel.SIZE = size
+        gLevel.MINES = minesNumber
+        init()
+    } else document.getElementById("4X4").checked = false
+    if (size === 8) {
+        document.getElementById("8X8").checked = true
+        gLevel.SIZE = size
+        gLevel.MINES = minesNumber
+        init()
+    } else document.getElementById("8X8").checked = false
+    if (size === 12) {
+        document.getElementById("12X12").checked = true
+        gLevel.SIZE = size
+        gLevel.MINES = minesNumber
+        init()
+    } else document.getElementById("12X12").checked = false
 }
 
 function buildBoard() {
@@ -243,6 +264,9 @@ function restartGame() {
     gMinutes = 0
     gHints = 3
     gLives = 3
+    document.getElementById("4X4").checked = false
+    document.getElementById("8X8").checked = false
+    document.getElementById("12X12").checked = false
     clearInterval(gStopWatch)
     init()
 }
