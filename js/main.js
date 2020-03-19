@@ -270,12 +270,13 @@ function getGameTime() {
 
 function calcBestTime() {
     var storedGameTime = localStorage.getItem('gameTime')
-    var temp = handleGameTimeInLocalStorage(storedGameTime)
-
+    
     if (storedGameTime === null) {
+        var temp = handleGameTimeInLocalStorage('')
         saveGameTime()
         document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + minutes + ':' + gGame.secsPassed);
     } else {
+        var temp = handleGameTimeInLocalStorage(storedGameTime)
         if (temp[0] > minutes) {
             saveGameTime()
             document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + minutes + ':' + gGame.secsPassed);
