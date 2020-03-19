@@ -13,7 +13,7 @@ var gGame = {
 }
 var gGameOver = false
 var gStopWatch
-var minutes = 0
+var gMinutes = 0
 var gHints = 3
 
 const EMPTY = '';
@@ -26,9 +26,7 @@ const SMILEY_WIN = '&#128526;'
 
 function init() {
     clearInterval(gStopWatch)
-    showBestTime()
-    document.querySelector('.stop-watch').innerHTML = minutes + ': 0' + gGame.secsPassed;
-    document.querySelector('.smiley').innerHTML = SMILEY_NORMAL
+    showFeatures()
     buildBoard()
     renderHints(gHints)
     setMinesInRandomCell()
@@ -204,7 +202,7 @@ function restartGame() {
     gGame.isOn = true;
     gGame.secsPassed = 0
     gGameOver = false
-    minutes = 0
+    gMinutes = 0
     gHints = 3
     clearInterval(gStopWatch)
     init()
@@ -249,23 +247,26 @@ function stopWatch() {
     gGame.secsPassed++;
     if (gGame.secsPassed === 60) {
         gGame.secsPassed = 0
-        minutes++
+        gMinutes++
     }
     if (gGame.secsPassed < 10) gGame.secsPassed = '0' + gGame.secsPassed
-    document.querySelector('.stop-watch').innerHTML = minutes + ':' + gGame.secsPassed;
+    document.querySelector('.stop-watch').innerHTML = gMinutes + ':' + gGame.secsPassed;
 }
 
-function showBestTime(){
+function showFeatures(){
     var storedGameTime = localStorage.getItem('gameTime');
     if (storedGameTime!== null) document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + storedGameTime);
+
+    document.querySelector('.stop-watch').innerHTML = gMinutes + ': 0' + gGame.secsPassed;
+    document.querySelector('.smiley').innerHTML = SMILEY_NORMAL
 }
 
 function saveGameTime() {
-    localStorage.setItem('gameTime', minutes + ':' + gGame.secsPassed);
+    localStorage.setItem('gameTime', gMinutes + ':' + gGame.secsPassed);
 }
 
 function getGameTime() {
-    return minutes + ' min and ' + gGame.secsPassed + ' sec'
+    return gMinutes + ' min and ' + gGame.secsPassed + ' sec'
 }
 
 function calcBestTime() {
@@ -274,16 +275,16 @@ function calcBestTime() {
     if (storedGameTime === null) {
         var temp = handleGameTimeInLocalStorage('')
         saveGameTime()
-        document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + minutes + ':' + gGame.secsPassed);
+        document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + gMinutes + ':' + gGame.secsPassed);
     } else {
         var temp = handleGameTimeInLocalStorage(storedGameTime)
-        if (temp[0] > minutes) {
+        if (temp[0] > gMinutes) {
             saveGameTime()
-            document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + minutes + ':' + gGame.secsPassed);
+            document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + gMinutes + ':' + gGame.secsPassed);
         }
         else if (temp[1] > gGame.secsPassed) {
             saveGameTime()
-            document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + minutes + ':' + gGame.secsPassed);
+            document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + gMinutes + ':' + gGame.secsPassed);
         }
         else {
             document.querySelector('.best-game-time h2').innerHTML = ("Your best time is " + storedGameTime);
