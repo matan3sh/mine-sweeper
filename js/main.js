@@ -73,39 +73,11 @@ function firstClick(row, col) {
     gStopWatch = setInterval(stopWatch, 1000)
 }
 
-function checkLives(currCell){
-    var elLives = document.querySelector('.lives');
-    if(gLives === 3) {
-        elLives.innerHTML = LIVES + LIVES
-        setTimeout(function () {
-            currCell.classList.remove('marked')
-        }, 1000)
-        gLives--
-        return true
-    }
-    else if (gLives === 2) {
-        elLives.innerHTML = LIVES
-        setTimeout(function () {
-            currCell.classList.remove('marked')
-        }, 1000)
-        gLives--
-        return true
-    }
-    else if (gLives === 1) {
-        elLives.innerHTML = ''
-        setTimeout(function () {
-            currCell.classList.remove('marked')
-        }, 1000)
-        gLives--
-        return true
-    }
-    return false
-}
 
 function cellClicked(elCell) {
     var cellOnBoard = toNumber(getCellCoord(elCell))
     var cell = gBoard[cellOnBoard[0]][cellOnBoard[1]]
-
+    
     if (gGameOver) return
     if (gGame.isOn) {
         gGame.isOn = false
@@ -135,11 +107,11 @@ function cellClicked(elCell) {
         // Update Modal
         cell.isShown = true
         gGame.shownCount++
-
+        
         // Update DOM
         elCell.innerHTML = cell.minesAroundCount
         elCell.classList.add('marked')
-
+        
         if (isFinished()) {
             // Update DOM
             console.log('WIN', getGameTime())
@@ -151,7 +123,7 @@ function cellClicked(elCell) {
         }
         if (cell.minesAroundCount === 0) expandShown(elCell)
     }
-
+    
 }
 
 
@@ -181,7 +153,7 @@ function setMinesNegsCount(mineRow, mineCol) {
 // display neighbors while there is no mine around
 function expandShown(elCurrCell) {
     var cellOnBoard = toNumber(getCellCoord(elCurrCell))
-
+    
     for (var i = cellOnBoard[0] - 1; i <= cellOnBoard[0] + 1; i++) {
         if (i < 0 || i >= gLevel.SIZE) continue
         for (var j = cellOnBoard[1] - 1; j <= cellOnBoard[1] + 1; j++) {
@@ -189,17 +161,17 @@ function expandShown(elCurrCell) {
             if (i === cellOnBoard[0] && j === cellOnBoard[1]) continue
             if (gBoard[i][j].isShown) continue;
             var id = 'td ' + (i) + '-' + (j);
-
+            
             // Update Model
             gBoard[i][j].isShown = true;
-
+            
             // Update DOM
             var elNegCell = document.getElementById(id);
             elNegCell.innerHTML = gBoard[i][j].minesAroundCount
             elNegCell.classList.add('marked')
-
+            
             gGame.shownCount++
-
+            
             if (!gBoard[i][j].minesAroundCount) {
                 expandShown(elNegCell)
             }
@@ -210,23 +182,52 @@ function expandShown(elCurrCell) {
 function flagClick(elCell) {
     var cellOnBoard = toNumber(getCellCoord(elCell))
     var cell = gBoard[cellOnBoard[0]][cellOnBoard[1]]
-
+    
     if (cell.isShown) return
     else {
         if (!cell.isMarked) {
             // Update Modal
             cell.isMarked = true
-
+            
             // Update DOM
             elCell.innerHTML = FLAG
         } else {
             // Update Modal
             cell.isMarked = false
-
+            
             // Update DOM
             elCell.innerHTML = EMPTY
         }
     }
+}
+
+function checkLives(currCell){
+    var elLives = document.querySelector('.lives');
+    if(gLives === 3) {
+        elLives.innerHTML = LIVES + LIVES
+        setTimeout(function () {
+            currCell.classList.remove('marked')
+        }, 1000)
+        gLives--
+        return true
+    }
+    else if (gLives === 2) {
+        elLives.innerHTML = LIVES
+        setTimeout(function () {
+            currCell.classList.remove('marked')
+        }, 1000)
+        gLives--
+        return true
+    }
+    else if (gLives === 1) {
+        elLives.innerHTML = ''
+        setTimeout(function () {
+            currCell.classList.remove('marked')
+        }, 1000)
+        gLives--
+        return true
+    }
+    return false
 }
 
 function isFinished() {
